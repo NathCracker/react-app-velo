@@ -12,10 +12,10 @@ import NotificationsActiveIcon from '@mui/icons-material/NotificationsActive';
 import SecurityIcon from '@mui/icons-material/Security';
 import PageTransition from '../components/PageTransition';
 
-// Hero section
+// Hero section (Red gradient with modern photo)
 const HeroSection = styled(Box)({
   backgroundImage:
-    'linear-gradient(to bottom right, rgba(25, 118, 210, 0.7), rgba(21, 101, 192, 0.9)), url("https://images.pexels.com/photos/380768/pexels-photo-380768.jpeg")',
+    'linear-gradient(to bottom right, rgba(75, 75, 75, 0.8), rgba(0, 0, 0, 0.9)), url("https://images.pexels.com/photos/7109063/pexels-photo-7109063.jpeg")',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundAttachment: 'fixed',
@@ -50,90 +50,95 @@ const FeatureCard = styled(Paper)(({ theme }) => ({
 
 const IconWrapper = styled(Box)({
   fontSize: 48,
-  color: '#1565c0',
+  color: '#D32F2F', // Matches hero red
   marginBottom: '1rem',
 });
 
 const Home = () => {
-  return ( 
+  return (
     <>
       <PageTransition>
-      <HeroSection>
-        <Container maxWidth="md">
-          <Typography variant="h3" fontWeight={700} gutterBottom>
-            Welcome to Velociraptor Technologies
-          </Typography>
-          <Typography variant="h6" paragraph sx={{ maxWidth: 600, margin: '0 auto' }}>
-            Smart. Fast. Reliable. Your appointment system just got better.
-          </Typography>
-          <Button
-            variant="contained"
-            size="large"
-            color="secondary"
-            sx={{ mt: 2 }}
-            href="/apply"
-          >
-            Get Started
-          </Button>
-        </Container>
-      </HeroSection>
+        <HeroSection>
+          <Container maxWidth="md">
+            <Typography variant="h3" fontWeight={700} gutterBottom>
+              Welcome to Velociraptor Technologies
+            </Typography>
+            <Typography variant="h6" paragraph sx={{ maxWidth: 600, margin: '0 auto' }}>
+              Smart. Fast. Reliable. Your appointment system just got better.
+            </Typography>
+            <Button
+              variant="contained"
+              size="large"
+              sx={{
+                mt: 2,
+                backgroundColor: '#D32F2F',
+                '&:hover': {
+                  backgroundColor: '#B71C1C',
+                },
+              }}
+              href="/apply"
+            >
+              Get Started
+            </Button>
+          </Container>
+        </HeroSection>
 
-      {/* Features Section */}
-      <Box sx={{ py: 8, backgroundColor: '#f9f9f9' }}>
-        <Container maxWidth="lg">
-          <Typography variant="h4" align="center" fontWeight={600} gutterBottom>
-            Why Choose Us?
-          </Typography>
-          <Typography
-            variant="body1"
-            align="center"
-            color="textSecondary"
-            sx={{ mb: 6, maxWidth: 700, mx: 'auto' }}
-          >
-            We provide a seamless booking experience that's secure, efficient, and user-friendly.
-          </Typography>
+        {/* Features Section */}
+        <Box sx={{ py: 8, backgroundColor: '#f9f9f9' }}>
+          <Container maxWidth="lg">
+            <Typography variant="h4" align="center" fontWeight={600} gutterBottom>
+              Why Choose Us?
+            </Typography>
+            <Typography
+              variant="body1"
+              align="center"
+              color="textSecondary"
+              sx={{ mb: 6, maxWidth: 700, mx: 'auto' }}
+            >
+              We provide a seamless booking experience that's secure, efficient, and user-friendly.
+            </Typography>
 
-          <CardWrapper>
-            <FeatureCard elevation={3}>
-              <IconWrapper>
-                <ScheduleIcon fontSize="inherit" />
-              </IconWrapper>
-              <Typography variant="h6" gutterBottom>
-                Easy Scheduling
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
-                Schedule appointments in just a few clicks with our intuitive interface.
-              </Typography>
-            </FeatureCard>
+            <CardWrapper>
+              <FeatureCard elevation={3}>
+                <IconWrapper>
+                  <ScheduleIcon fontSize="inherit" />
+                </IconWrapper>
+                <Typography variant="h6" gutterBottom>
+                  Easy Scheduling
+                </Typography>
+                <Typography variant="body1" color="textSecondary">
+                  Schedule appointments in just a few clicks with our intuitive interface.
+                </Typography>
+              </FeatureCard>
 
-            <FeatureCard elevation={3}>
-              <IconWrapper>
-                <NotificationsActiveIcon fontSize="inherit" />
-              </IconWrapper>
-              <Typography variant="h6" gutterBottom>
-                Real-time Updates
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
-                Stay informed with instant notifications and live updates.
-              </Typography>
-            </FeatureCard>
+              <FeatureCard elevation={3}>
+                <IconWrapper>
+                  <NotificationsActiveIcon fontSize="inherit" />
+                </IconWrapper>
+                <Typography variant="h6" gutterBottom>
+                  Real-time Updates
+                </Typography>
+                <Typography variant="body1" color="textSecondary">
+                  Stay informed with instant notifications and live updates.
+                </Typography>
+              </FeatureCard>
 
-            <FeatureCard elevation={3}>
-              <IconWrapper>
-                <SecurityIcon fontSize="inherit" />
-              </IconWrapper>
-              <Typography variant="h6" gutterBottom>
-                Secure & Reliable
-              </Typography>
-              <Typography variant="body1" color="textSecondary">
-                Your data is protected by enterprise-level encryption and safeguards.
-              </Typography>
-            </FeatureCard>
-          </CardWrapper>
-        </Container>
-      </Box>
+              <FeatureCard elevation={3}>
+                <IconWrapper>
+                  <SecurityIcon fontSize="inherit" />
+                </IconWrapper>
+                <Typography variant="h6" gutterBottom>
+                  Secure & Reliable
+                </Typography>
+                <Typography variant="body1" color="textSecondary">
+                  Your data is protected by enterprise-level encryption and safeguards.
+                </Typography>
+              </FeatureCard>
+            </CardWrapper>
+          </Container>
+        </Box>
       </PageTransition>
-      </>
+    </>
   );
 };
 

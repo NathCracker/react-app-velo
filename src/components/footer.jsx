@@ -17,7 +17,7 @@ import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
 const FooterWrapper = styled(Box)(({ theme }) => ({
-  backgroundColor: '#0D47A1',
+  backgroundColor: '#2C2C2C', // Neutral dark gray
   color: '#fff',
   paddingTop: theme.spacing(6),
   paddingBottom: theme.spacing(4),
@@ -25,13 +25,13 @@ const FooterWrapper = styled(Box)(({ theme }) => ({
 }));
 
 const FooterLink = styled(Link)({
-  color: '#ccc',
+  color: '#cccccc',
   textDecoration: 'none',
   fontSize: '0.9rem',
   display: 'block',
   marginBottom: 6,
   '&:hover': {
-    color: '#fff',
+    color: '#ffffff',
     textDecoration: 'underline',
   },
 });
@@ -46,7 +46,7 @@ const Footer = () => {
             <Typography variant="h6" fontWeight={700} gutterBottom>
               Velociraptor Technologies
             </Typography>
-            <Typography variant="body2">
+            <Typography variant="body2" color="#cccccc">
               Smart. Fast. Reliable. Simplifying your appointment needs.
             </Typography>
           </Grid>
@@ -71,14 +71,14 @@ const Footer = () => {
                 <Typography variant="subtitle1" fontWeight={600} gutterBottom>
                   Contact Us
                 </Typography>
-                <Typography variant="body2">
+                <Typography variant="body2" color="#cccccc">
                   📍 No. 11 7th Street, Brgy. Sto. Nino<br />
                   Marikina City, PH 1000
                 </Typography>
-                <Typography variant="body2" sx={{ mt: 1 }}>
+                <Typography variant="body2" sx={{ mt: 1 }} color="#cccccc">
                   📞 (02) 1234-5678
                 </Typography>
-                <Typography variant="body2">
+                <Typography variant="body2" color="#cccccc">
                   📧 contact@velociraptortech.com
                 </Typography>
               </Grid>
@@ -89,10 +89,10 @@ const Footer = () => {
                   Stay Connected
                 </Typography>
                 <Box>
-                  <IconButton href="#" sx={{ color: '#fff' }}><FacebookIcon /></IconButton>
-                  <IconButton href="#" sx={{ color: '#fff' }}><TwitterIcon /></IconButton>
-                  <IconButton href="#" sx={{ color: '#fff' }}><LinkedInIcon /></IconButton>
-                  <IconButton href="#" sx={{ color: '#fff' }}><InstagramIcon /></IconButton>
+                  <IconButton href="#" sx={{ color: '#ffffff' }}><FacebookIcon /></IconButton>
+                  <IconButton href="#" sx={{ color: '#ffffff' }}><TwitterIcon /></IconButton>
+                  <IconButton href="#" sx={{ color: '#ffffff' }}><LinkedInIcon /></IconButton>
+                  <IconButton href="#" sx={{ color: '#ffffff' }}><InstagramIcon /></IconButton>
                 </Box>
                 <Box mt={2}>
                   <TextField
@@ -101,7 +101,7 @@ const Footer = () => {
                     label="Email address"
                     fullWidth
                     sx={{
-                      backgroundColor: '#fff',
+                      backgroundColor: '#ffffff',
                       borderRadius: 1,
                       input: { padding: '10px' },
                     }}
@@ -109,7 +109,13 @@ const Footer = () => {
                   <Button
                     variant="contained"
                     fullWidth
-                    sx={{ mt: 1, backgroundColor: '#1565c0' }}
+                    sx={{
+                      mt: 1,
+                      backgroundColor: '#D32F2F',
+                      '&:hover': {
+                        backgroundColor: '#B71C1C',
+                      },
+                    }}
                   >
                     Subscribe
                   </Button>
@@ -121,7 +127,6 @@ const Footer = () => {
 
         <Divider sx={{ my: 4, backgroundColor: 'rgba(255,255,255,0.2)' }} />
 
-        {/* Copyright */}
         <Typography variant="body2" align="center" color="rgba(255,255,255,0.7)">
           © {new Date().getFullYear()} Velociraptor Technologies OPC. All rights reserved.
         </Typography>

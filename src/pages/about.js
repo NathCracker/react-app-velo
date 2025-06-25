@@ -14,7 +14,7 @@ import PageTransition from '../components/PageTransition';
 
 const Hero = styled(Box)(({ theme }) => ({
   backgroundImage:
-    'linear-gradient(to right, rgba(21, 101, 192, 0.8), rgba(21, 101, 192, 0.9)), url("https://images.pexels.com/photos/7988667/pexels-photo-7988667.jpeg")',
+    'linear-gradient(to right, rgba(75, 75, 75, 0.8), rgba(0, 0, 0, 0.9)), url("https://images.pexels.com/photos/7988667/pexels-photo-7988667.jpeg")',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   backgroundRepeat: 'no-repeat',
@@ -45,7 +45,7 @@ const InfoCard = styled(Paper)(({ theme }) => ({
 
 const IconWrapper = styled(Box)(({ theme }) => ({
   fontSize: 50,
-  color: theme.palette.primary.main,
+  color: "#D32F2F",
   marginBottom: theme.spacing(2),
 }));
 

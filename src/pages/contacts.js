@@ -19,7 +19,7 @@ import PageTransition from '../components/PageTransition';
 
 const Header = styled(Box)(({ theme }) => ({
   backgroundImage:
-    'linear-gradient(to right, rgba(13, 71, 161, 0.85), rgba(13, 71, 161, 0.9)), url("https://images.pexels.com/photos/380768/pexels-photo-380768.jpeg")',
+    'linear-gradient(to right, rgba(75, 75, 75, 0.8), rgba(0, 0, 0, 0.9)), url("https://images.pexels.com/photos/380768/pexels-photo-380768.jpeg")',
   backgroundSize: 'cover',
   backgroundPosition: 'center',
   color: '#fff',
@@ -34,9 +34,10 @@ const FormSection = styled(Paper)(({ theme }) => ({
   height: '100%',
 }));
 
+// Updated icon + text layout
 const IconText = ({ icon: Icon, text }) => (
   <Box sx={{ display: 'flex', alignItems: 'center', mb: 1.5 }}>
-    <Icon sx={{ mr: 1, color: 'primary.main' }} />
+    <Icon sx={{ mr: 1, color: '#D32F2F' }} />
     <Typography variant="body1" whiteSpace="pre-line">{text}</Typography>
   </Box>
 );
@@ -70,103 +71,108 @@ const Contact = () => {
 
   return (
     <>
-    <PageTransition>
-      <Header>
-        <Typography variant="h4" fontWeight={700} gutterBottom>
-          Contact Us
-        </Typography>
-        <Typography variant="h6" sx={{ maxWidth: 700, mx: 'auto' }}>
-          We're here to help. Reach out to us with any questions or concerns.
-        </Typography>
-      </Header>
+      <PageTransition>
+        <Header>
+          <Typography variant="h4" fontWeight={700} gutterBottom>
+            Contact Us
+          </Typography>
+          <Typography variant="h6" sx={{ maxWidth: 700, mx: 'auto' }}>
+            We're here to help. Reach out to us with any questions or concerns.
+          </Typography>
+        </Header>
 
-      <Container maxWidth="lg" sx={{ py: 6 }}>
-        <Grid container spacing={4} justifyContent="center" alignItems="flex-start">
-          {/* Left: Form */}
-          <Grid item xs={12} md={6}>
-            <FormSection>
-              <Typography variant="h6" fontWeight={600} gutterBottom>
-                Send a Message
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              <Box component="form" noValidate onSubmit={handleSubmit}>
-                <TextField
-                  label="Full Name"
-                  name="name"
-                  value={formValues.name}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.name}
-                  helperText={errors.name}
+        <Container maxWidth="lg" sx={{ py: 6 }}>
+          <Grid container spacing={4} justifyContent="center" alignItems="flex-start">
+            {/* Left: Form */}
+            <Grid item xs={12} md={6}>
+              <FormSection>
+                <Typography variant="h6" fontWeight={600} gutterBottom>
+                  Send a Message
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+                <Box component="form" noValidate onSubmit={handleSubmit}>
+                  <TextField
+                    label="Full Name"
+                    name="name"
+                    value={formValues.name}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    error={!!errors.name}
+                    helperText={errors.name}
+                  />
+                  <TextField
+                    label="Email"
+                    name="email"
+                    type="email"
+                    value={formValues.email}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    error={!!errors.email}
+                    helperText={errors.email}
+                  />
+                  <TextField
+                    label="Message"
+                    name="message"
+                    multiline
+                    rows={4}
+                    value={formValues.message}
+                    onChange={handleChange}
+                    fullWidth
+                    margin="normal"
+                    variant="outlined"
+                    error={!!errors.message}
+                    helperText={errors.message}
+                  />
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    size="large"
+                    sx={{
+                      mt: 2,
+                      backgroundColor: '#D32F2F',
+                      '&:hover': {
+                        backgroundColor: '#B71C1C',
+                      },
+                    }}
+                  >
+                    Submit
+                  </Button>
+                </Box>
+              </FormSection>
+            </Grid>
+
+            {/* Right: Contact Info */}
+            <Grid item xs={12} md={5}>
+              <FormSection sx={{ mt: { xs: 2, md: 0 } }}>
+                <Typography variant="h6" fontWeight={600} gutterBottom>
+                  Contact Information
+                </Typography>
+                <Divider sx={{ mb: 2 }} />
+                <IconText
+                  icon={LocationOnIcon}
+                  text={`Velociraptor Technologies OPC\nNo. 11 7th Street, Brgy. Sto. Niño\nMarikina City, PH 1000`}
                 />
-                <TextField
-                  label="Email"
-                  name="email"
-                  type="email"
-                  value={formValues.email}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.email}
-                  helperText={errors.email}
-                />
-                <TextField
-                  label="Message"
-                  name="message"
-                  multiline
-                  rows={4}
-                  value={formValues.message}
-                  onChange={handleChange}
-                  fullWidth
-                  margin="normal"
-                  variant="outlined"
-                  error={!!errors.message}
-                  helperText={errors.message}
-                />
-                <Button
-                  type="submit"
-                  variant="contained"
-                  size="large"
-                  color="primary"
-                  sx={{ mt: 2 }}
-                >
-                  Submit
-                </Button>
-              </Box>
-            </FormSection>
+                <IconText icon={PhoneIcon} text="(02) 1234-5678" />
+                <IconText icon={EmailIcon} text="contact@velociraptortech.com" />
+              </FormSection>
+            </Grid>
           </Grid>
+        </Container>
 
-          {/* Right: Contact Info */}
-          <Grid item xs={12} md={5}>
-            <FormSection sx={{ mt: { xs: 2, md: 0 } }}>
-              <Typography variant="h6" fontWeight={600} gutterBottom>
-                Contact Information
-              </Typography>
-              <Divider sx={{ mb: 2 }} />
-              <IconText
-                icon={LocationOnIcon}
-                text={`Velociraptor Technologies OPC\nNo. 11 7th Street, Brgy. Sto. Niño\nMarikina City, PH 1000`}
-              />
-              <IconText icon={PhoneIcon} text="(02) 1234-5678" />
-              <IconText icon={EmailIcon} text="contact@velociraptortech.com" />
-            </FormSection>
-          </Grid>
-        </Grid>
-      </Container>
-
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={4000}
-        onClose={() => setOpenSnackbar(false)}
-        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
-      >
-        <Alert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
-          Message submitted successfully!
-        </Alert>
-      </Snackbar>
+        <Snackbar
+          open={openSnackbar}
+          autoHideDuration={4000}
+          onClose={() => setOpenSnackbar(false)}
+          anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+        >
+          <Alert onClose={() => setOpenSnackbar(false)} severity="success" sx={{ width: '100%' }}>
+            Message submitted successfully!
+          </Alert>
+        </Snackbar>
       </PageTransition>
     </>
   );

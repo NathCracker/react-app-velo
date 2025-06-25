@@ -15,18 +15,27 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginWrapper = styled(Box)(({ theme }) => ({
   minHeight: '100vh',
-  backgroundColor: '#f0f4f8',
+  backgroundColor: '#f9f9f9',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  padding: theme.spacing(2),
 }));
 
 const LoginCard = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(5),
-  maxWidth: 400,
+  maxWidth: 420,
   width: '100%',
   textAlign: 'center',
+  borderRadius: theme.spacing(2),
+  boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
 }));
+
+const Logo = styled('img')({
+  width: 320,
+  height: 80,
+  marginBottom: 16,
+});
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -40,7 +49,6 @@ const AdminLogin = () => {
     const username = e.target.username.value.trim();
     const password = e.target.password.value.trim();
 
-    // 🔐 Replace with real authentication logic later
     if (username === 'admin' && password === 'admin123') {
       localStorage.setItem('isAuthenticated', 'true');
       navigate('/dashboard');
@@ -52,8 +60,15 @@ const AdminLogin = () => {
   return (
     <LoginWrapper>
       <LoginCard elevation={4}>
-        <Typography variant="h5" gutterBottom>
+        {/* Logo on top */}
+        <Logo src="/logo.png" alt="Logo" />
+
+        <Typography variant="h5" fontWeight={700} gutterBottom>
           Admin Login
+        </Typography>
+
+        <Typography variant="body2" sx={{ color: '#777', mb: 2 }}>
+          Authorized access only
         </Typography>
 
         {error && (
@@ -92,9 +107,14 @@ const AdminLogin = () => {
           <Button
             type="submit"
             variant="contained"
-            color="primary"
             fullWidth
-            sx={{ mt: 2 }}
+            sx={{
+              mt: 3,
+              backgroundColor: '#D32F2F',
+              '&:hover': {
+                backgroundColor: '#B71C1C',
+              },
+            }}
           >
             Login
           </Button>

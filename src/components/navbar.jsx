@@ -20,7 +20,6 @@ const pages = [
   { label: 'About', path: '/about' },
   { label: 'Contact', path: '/contact' },
   { label: 'Apply', path: '/apply' },
-  //{ label: 'Admin', path: '/admin' },
 ];
 
 const Navbar = () => {
@@ -32,7 +31,7 @@ const Navbar = () => {
 
   return (
     <>
-      <AppBar position="fixed" elevation={4} sx={{ backgroundColor: '#0D47A1' }}>
+      <AppBar position="fixed" elevation={4} sx={{ backgroundColor: '#FFFFFF', color: '#000' }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
           {/* Logo Section */}
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -47,10 +46,10 @@ const Navbar = () => {
               sx={{
                 display: { xs: 'none', sm: 'block' },
                 fontWeight: 700,
-                color: 'white',
+                color: '#000',
               }}
             >
-            
+              
             </Typography>
           </Box>
 
@@ -62,15 +61,15 @@ const Navbar = () => {
                 component={NavLink}
                 to={path}
                 sx={{
-                  color: 'white',
+                  color: '#000',
                   fontWeight: 500,
                   textTransform: 'none',
                   '&:hover': {
-                    backgroundColor: 'rgba(255,255,255,0.1)',
+                    backgroundColor: 'rgba(211, 47, 47, 0.1)', // light red
                   },
                   '&.active': {
-                    backgroundColor: 'rgba(255,255,255,0.2)',
-                    borderBottom: '2px solid white',
+                    backgroundColor: 'rgba(211, 47, 47, 0.15)',
+                    borderBottom: '2px solid #D32F2F',
                     fontWeight: 'bold',
                   },
                 }}
@@ -113,10 +112,10 @@ const Navbar = () => {
                   to={path}
                   sx={{
                     '&:hover': {
-                      backgroundColor: 'rgba(13, 71, 161, 0.08)',
+                      backgroundColor: 'rgba(211, 47, 47, 0.08)',
                     },
                     '&.active': {
-                      backgroundColor: 'rgba(13, 71, 161, 0.15)',
+                      backgroundColor: 'rgba(211, 47, 47, 0.15)',
                     },
                   }}
                 >
@@ -125,7 +124,7 @@ const Navbar = () => {
                     sx={{
                       '.active &': {
                         fontWeight: 'bold',
-                        color: '#0D47A1',
+                        color: '#D32F2F',
                       },
                     }}
                   />
