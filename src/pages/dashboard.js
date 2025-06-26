@@ -1,47 +1,49 @@
 import React, { useState } from 'react';
 import {
-  Container,
-  Typography,
-  Button,
-  Card,
-  CardContent,
-  Avatar,
-  Tabs,
-  Tab,
+  AppBar,
   Box,
+  Toolbar,
+  Typography,
+  IconButton,
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Avatar,
+  Button,
+  Divider,
   Paper,
+  Slide
 } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
 import { styled } from '@mui/system';
 
-// --- Styled Components ---
-const ProfileCard = styled(Card)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+const drawerWidth = 240;
+
+const MainContent = styled('main', {
+  shouldForwardProp: (prop) => prop !== 'open',
+})(({ theme, open }) => ({
+  flexGrow: 1,
   padding: theme.spacing(3),
-  marginTop: theme.spacing(4),
-  borderRadius: theme.spacing(2),
-  boxShadow: '0 8px 24px rgba(0,0,0,0.1)',
+  marginLeft: open ? drawerWidth : 0,
+  transition: theme.transitions.create(['margin'], {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.enteringScreen,
+  }),
 }));
 
-const AvatarLarge = styled(Avatar)(({ theme }) => ({
-  width: 90,
-  height: 90,
-  marginRight: theme.spacing(3),
+const SidebarFooter = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: '1px solid #ddd',
+  textAlign: 'center',
 }));
 
-const TabPanel = ({ value, index, children }) => (
-  <div hidden={value !== index}>
-    {value === index && <Box pt={2}>{children}</Box>}
-  </div>
-);
-
-// --- Dashboard Component ---
 const Dashboard = () => {
-  const [tabValue, setTabValue] = useState(0);
+  const [open, setOpen] = useState(true);
+  const [selectedTab, setSelectedTab] = useState(0);
 
-  const handleTabChange = (_, newValue) => {
-    setTabValue(newValue);
-  };
+  const tabs = ['Overview', 'Applicants', 'Reports', 'Teams', 'Settings'];
 
   const handleLogout = () => {
     localStorage.removeItem('isAuthenticated');
@@ -49,62 +51,92 @@ const Dashboard = () => {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 6 }}>
-      <Typography variant="h4" fontWeight="bold" gutterBottom>
-        Welcome to the Admin Dashboard
-      </Typography>
-
-      {/* Profile Card */}
-      <ProfileCard>
-        <AvatarLarge src="/admin-avatar.jpg" alt="Admin" />
-        <CardContent>
-          <Typography variant="h6">Juan Velociraptor</Typography>
-          <Typography variant="body2" color="text.secondary">
-            System Administrator
+    <Box sx={{ display: 'flex', height: '100vh' }}>
+      {/* App Bar */}
+      <AppBar position="fixed" sx={{ zIndex: 1300, backgroundColor: '#D32F2F' }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={() => setOpen(!open)}
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap>
+            Welcome to Admin Dashboard
           </Typography>
-        </CardContent>
-      </ProfileCard>
+        </Toolbar>
+      </AppBar>
 
-      {/* Tabs */}
-      <Paper sx={{ mt: 4, borderRadius: 2 }}>
-        <Tabs
-          value={tabValue}
-          onChange={handleTabChange}
-          indicatorColor="primary"
-          textColor="primary"
-          variant="scrollable"
-          scrollButtons="auto"
+      {/* Collapsible Sidebar */}
+      <Slide direction="right" in={open} mountOnEnter unmountOnExit>
+        <Drawer
+          variant="persistent"
+          open={open}
+          anchor="left"
+          sx={{
+            width: drawerWidth,
+            flexShrink: 0,
+            '& .MuiDrawer-paper': {
+              width: drawerWidth,
+              boxSizing: 'border-box',
+              backgroundColor: '#f5f5f5',
+            },
+          }}
         >
-          <Tab label="Overview" />
-          <Tab label="Applicants" />
-          <Tab label="Reports" />
-          <Tab label="Settings" />
-        </Tabs>
+          <Toolbar />
+          <Box sx={{ overflow: 'auto', display: 'flex', flexDirection: 'column', height: '100%' }}>
+            <List>
+              {tabs.map((text, index) => (
+                <ListItem key={text} disablePadding>
+                  <ListItemButton
+                    selected={selectedTab === index}
+                    onClick={() => setSelectedTab(index)}
+                  >
+                    <ListItemText primary={text} />
+                  </ListItemButton>
+                </ListItem>
+              ))}
+            </List>
 
-        {/* Tab Content */}
-        <Box p={3}>
-          <TabPanel value={tabValue} index={0}>
-            <Typography>Admin Overview content goes here.</Typography>
-          </TabPanel>
-          <TabPanel value={tabValue} index={1}>
-            <Typography>List of applicants will be displayed here.</Typography>
-          </TabPanel>
-          <TabPanel value={tabValue} index={2}>
-            <Typography>Reports and analytics appear here.</Typography>
-          </TabPanel>
-          <TabPanel value={tabValue} index={3}>
-            <Typography>System settings and preferences.</Typography>
-          </TabPanel>
-        </Box>
-      </Paper>
+            <Box sx={{ flexGrow: 1 }} />
 
-      {/* Logout */}
-      <Box sx={{ textAlign: 'right', mt: 4 }}>
-        <Button variant="contained" color="error" onClick={handleLogout}>
-          Logout
-        </Button>
-      </Box>
-    </Container>
+            {/* User Info */}
+            <SidebarFooter>
+              <Avatar src="/admin-avatar.png" sx={{ width: 64, height: 64, mx: 'auto', mb: 1 }} />
+              <Typography variant="subtitle1">Admin Name</Typography>
+              <Typography variant="body2" color="text.secondary">
+                System Administrator
+              </Typography>
+              <Button
+                variant="outlined"
+                color="error"
+                size="small"
+                onClick={handleLogout}
+                sx={{ mt: 1 }}
+              >
+                Logout
+              </Button>
+            </SidebarFooter>
+          </Box>
+        </Drawer>
+      </Slide>
+
+      {/* Main Content */}
+      <MainContent open={open}>
+        <Toolbar />
+        <Paper elevation={2} sx={{ p: 4 }}>
+          <Typography variant="h5" gutterBottom>
+            {tabs[selectedTab]}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            This is the content area for "{tabs[selectedTab]}". Replace this with your components.
+          </Typography>
+        </Paper>
+      </MainContent>
+    </Box>
   );
 };
 

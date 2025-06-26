@@ -21,7 +21,9 @@ const ParallaxHero = styled(Box)(({ theme }) => ({
   backgroundPosition: 'center',
   backgroundAttachment: 'fixed',
   color: '#fff',
+  minHeight: '30vh',
   textAlign: 'center',
+  alignItems: 'center',
   padding: '6rem 1rem',
   [theme.breakpoints.down('sm')]: {
     backgroundAttachment: 'scroll',
@@ -97,7 +99,7 @@ const ApplicationForm = () => {
           </Container>
         </ParallaxHero>
 
-        <Container maxWidth="md">
+        <Container maxWidth="md" sx={{p: 3}}>
           <FormContainer>
             <Typography variant="h5" gutterBottom>
               Applicant Information

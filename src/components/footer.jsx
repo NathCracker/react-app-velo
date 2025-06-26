@@ -16,12 +16,12 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import InstagramIcon from '@mui/icons-material/Instagram';
 
+// Removed marginTop to eliminate vertical spacing above footer
 const FooterWrapper = styled(Box)(({ theme }) => ({
-  backgroundColor: '#2C2C2C', // Neutral dark gray
+  backgroundColor: '#2C2C2C',
   color: '#fff',
   paddingTop: theme.spacing(6),
   paddingBottom: theme.spacing(4),
-  marginTop: theme.spacing(10),
 }));
 
 const FooterLink = styled(Link)({

@@ -25,6 +25,8 @@ const Header = styled(Box)(({ theme }) => ({
   color: '#fff',
   padding: theme.spacing(8, 2),
   textAlign: 'center',
+  alignItems: 'center',
+  minHeight: '30vh'
 }));
 
 const FormSection = styled(Paper)(({ theme }) => ({
