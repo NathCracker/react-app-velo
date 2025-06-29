@@ -12,8 +12,8 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/system';
 import PageTransition from '../components/PageTransition';
+import axios from 'axios';
 
-// Red-toned parallax background
 const ParallaxHero = styled(Box)(({ theme }) => ({
   backgroundImage:
     'linear-gradient(to bottom right, rgba(75, 75, 75, 0.8), rgba(0, 0, 0, 0.9)), url("https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg")',
@@ -51,38 +51,61 @@ const ApplicationForm = () => {
   const [error, setError] = useState('');
 
   const handleChange = (e) => {
+    const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
   };
 
   const handleFileChange = (e) => {
     const { name, files } = e.target;
     if (files[0]) {
-      const fileURL = URL.createObjectURL(files[0]);
-      setPreview((prev) => ({ ...prev, [name]: fileURL }));
       setFormData((prev) => ({ ...prev, [name]: files[0] }));
+      setPreview((prev) => ({ ...prev, [name]: URL.createObjectURL(files[0]) }));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const { fullName, address, contactNumber, id1, id2 } = formData;
+
     if (!fullName || !address || !contactNumber || !id1 || !id2) {
-      setError('Please fill in all fields and upload both ID images.');
+      setError('Please complete all fields and upload both ID images.');
       return;
     }
 
-    setSubmitted(true);
-    setFormData({
-      fullName: '',
-      address: '',
-      contactNumber: '',
-      id1: null,
-      id2: null,
-    });
-    setPreview({ id1: '', id2: '' });
+    try {
+      const formPayload = new FormData();
+      formPayload.append('fullName', fullName); // ✅ Matches backend
+      formPayload.append('address', address);   // ✅ Matches backend
+      formPayload.append('contactNumber', contactNumber); // ✅ Matches backend
+      formPayload.append('id1', id1);
+      formPayload.append('id2', id2);
+
+      const response = await axios.post('http://localhost:5000/api/applicants', formPayload, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      if (response.data.success) {
+        setSubmitted(true);
+        setFormData({
+          fullName: '',
+          address: '',
+          contactNumber: '',
+          id1: null,
+          id2: null,
+        });
+        setPreview({ id1: '', id2: '' });
+      } else {
+        setError(response.data.message || 'Failed to submit application.');
+      }
+    } catch (err) {
+      console.error('Submission error:', err);
+      setError('Server error. Please try again later.');
+    }
   };
 
   return (
@@ -99,7 +122,7 @@ const ApplicationForm = () => {
           </Container>
         </ParallaxHero>
 
-        <Container maxWidth="md" sx={{p: 3}}>
+        <Container maxWidth="md" sx={{ p: 3 }}>
           <FormContainer>
             <Typography variant="h5" gutterBottom>
               Applicant Information
@@ -134,59 +157,44 @@ const ApplicationForm = () => {
               />
 
               <Grid container spacing={3} mt={1}>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Upload ID 1
-                  </Typography>
-                  <Button
-                    component="label"
-                    variant="outlined"
-                    fullWidth
-                    sx={{
-                      borderColor: '#D32F2F',
-                      color: '#D32F2F',
-                      '&:hover': {
-                        borderColor: '#B71C1C',
-                        backgroundColor: 'rgba(211,47,47,0.05)',
-                      },
-                    }}
-                  >
-                    Upload ID 1
-                    <input type="file" hidden name="id1" accept="image/*" onChange={handleFileChange} />
-                  </Button>
-                  {preview.id1 && (
-                    <Box mt={2}>
-                      <img src={preview.id1} alt="ID 1 Preview" style={{ width: '100%', borderRadius: 8 }} />
-                    </Box>
-                  )}
-                </Grid>
-
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="subtitle1" gutterBottom>
-                    Upload ID 2
-                  </Typography>
-                  <Button
-                    component="label"
-                    variant="outlined"
-                    fullWidth
-                    sx={{
-                      borderColor: '#D32F2F',
-                      color: '#D32F2F',
-                      '&:hover': {
-                        borderColor: '#B71C1C',
-                        backgroundColor: 'rgba(211,47,47,0.05)',
-                      },
-                    }}
-                  >
-                    Upload ID 2
-                    <input type="file" hidden name="id2" accept="image/*" onChange={handleFileChange} />
-                  </Button>
-                  {preview.id2 && (
-                    <Box mt={2}>
-                      <img src={preview.id2} alt="ID 2 Preview" style={{ width: '100%', borderRadius: 8 }} />
-                    </Box>
-                  )}
-                </Grid>
+                {['id1', 'id2'].map((id, idx) => (
+                  <Grid item xs={12} sm={6} key={id}>
+                    <Typography variant="subtitle1" gutterBottom>
+                      Upload ID {idx + 1}
+                    </Typography>
+                    <Button
+                      component="label"
+                      variant="outlined"
+                      fullWidth
+                      sx={{
+                        borderColor: '#D32F2F',
+                        color: '#D32F2F',
+                        '&:hover': {
+                          borderColor: '#B71C1C',
+                          backgroundColor: 'rgba(211,47,47,0.05)',
+                        },
+                      }}
+                    >
+                      Upload ID {idx + 1}
+                      <input
+                        type="file"
+                        hidden
+                        name={id}
+                        accept="image/*"
+                        onChange={handleFileChange}
+                      />
+                    </Button>
+                    {preview[id] && (
+                      <Box mt={2}>
+                        <img
+                          src={preview[id]}
+                          alt={`ID ${idx + 1} Preview`}
+                          style={{ width: '100%', borderRadius: 8 }}
+                        />
+                      </Box>
+                    )}
+                  </Grid>
+                ))}
               </Grid>
 
               <Button
@@ -207,14 +215,12 @@ const ApplicationForm = () => {
           </FormContainer>
         </Container>
 
-        {/* Success Snackbar */}
         <Snackbar open={submitted} autoHideDuration={4000} onClose={() => setSubmitted(false)}>
           <Alert severity="success" onClose={() => setSubmitted(false)}>
             Application submitted successfully!
           </Alert>
         </Snackbar>
 
-        {/* Error Snackbar */}
         <Snackbar open={!!error} autoHideDuration={4000} onClose={() => setError('')}>
           <Alert severity="error" onClose={() => setError('')}>
             {error}

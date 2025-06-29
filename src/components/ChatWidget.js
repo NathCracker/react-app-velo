@@ -13,6 +13,9 @@ import SendIcon from '@mui/icons-material/Send';
 import CloseIcon from '@mui/icons-material/Close';
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
 import { styled, keyframes } from '@mui/system';
+import io from 'socket.io-client';
+
+const socket = io('http://localhost:5000');
 
 const adminAvatar = '/admin-avatar.png';
 const userAvatar = '/user-avatar.png';
@@ -55,14 +58,9 @@ const MessageBubble = styled(Paper)(({ isUser }) => ({
 }));
 
 const ChatWidget = () => {
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: 'Hi there! How can I help you today?',
-      sender: 'admin',
-      timestamp: new Date(),
-    },
-  ]);
+  const [clientName, setClientName] = useState('');
+  const [nameSubmitted, setNameSubmitted] = useState(false);
+  const [messages, setMessages] = useState([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [open, setOpen] = useState(true);
@@ -73,43 +71,82 @@ const ChatWidget = () => {
   };
 
   useEffect(() => {
+    socket.on('newMessage', (msg) => {
+      if (
+        msg.senderId === clientName ||
+        msg.recipientId === clientName ||
+        msg.sender === 'admin'
+      ) {
+        setMessages((prev) => [...prev, msg]);
+      }
+    });
+
+    return () => {
+      socket.off('newMessage');
+    };
+  }, [clientName]);
+
+  useEffect(() => {
     scrollToBottom();
   }, [messages]);
 
   const handleSend = () => {
-    if (!input.trim()) return;
+    if (!input.trim() || !clientName) return;
 
     const newMessage = {
-      id: Date.now(),
       text: input.trim(),
       sender: 'user',
-      timestamp: new Date(),
+      senderId: clientName,
+      timestamp: new Date().toISOString(),
     };
 
-    setMessages((prev) => [...prev, newMessage]);
+    socket.emit('sendMessage', newMessage);
     setInput('');
-    simulateAdminResponse();
+// Don't update messages locally — let the 'newMessage' event handle it
   };
 
-  const simulateAdminResponse = () => {
-    setIsTyping(true);
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        {
-          id: Date.now() + 1,
-          text: "Thanks! We'll respond shortly.",
-          sender: 'admin',
-          timestamp: new Date(),
-        },
-      ]);
-      setIsTyping(false);
-    }, 2000);
-  };
+  if (!nameSubmitted) {
+    return (
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 24,
+          right: 24,
+          width: 320,
+          p: 3,
+          background: '#fff',
+          borderRadius: 2,
+          boxShadow: 6,
+          zIndex: 1500,
+        }}
+      >
+        <Typography mb={1}>Enter your name to start the chat</Typography>
+        <TextField
+          fullWidth
+          size="small"
+          placeholder="Your name"
+          value={clientName}
+          onChange={(e) => setClientName(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' && clientName.trim()) {
+              setNameSubmitted(true);
+              setMessages([
+                {
+                  id: 1,
+                  text: 'Hi there! How can I help you today?',
+                  sender: 'admin',
+                  timestamp: new Date(),
+                },
+              ]);
+            }
+          }}
+        />
+      </Box>
+    );
+  }
 
   return (
     <>
-      {/* Floating Chat Toggle Button */}
       {!open && (
         <Tooltip title="Chat with us" placement="top">
           <IconButton
@@ -129,7 +166,6 @@ const ChatWidget = () => {
         </Tooltip>
       )}
 
-      {/* Chat Panel */}
       <Slide direction="up" in={open} mountOnEnter unmountOnExit>
         <Box
           sx={{
@@ -147,7 +183,6 @@ const ChatWidget = () => {
             zIndex: 1500,
           }}
         >
-          {/* Header */}
           <Box
             sx={{
               p: 2,
@@ -175,9 +210,9 @@ const ChatWidget = () => {
               backgroundColor: '#fafafa',
             }}
           >
-            {messages.map((msg) => (
+            {messages.map((msg, index) => (
               <MessageContainer
-                key={msg.id}
+                key={index}
                 sx={{
                   justifyContent:
                     msg.sender === 'user' ? 'flex-end' : 'flex-start',
@@ -199,7 +234,7 @@ const ChatWidget = () => {
                     color="text.secondary"
                     sx={{ fontSize: '0.7rem', mt: 0.5 }}
                   >
-                    {msg.timestamp.toLocaleTimeString([], {
+                    {new Date(msg.timestamp).toLocaleTimeString([], {
                       hour: '2-digit',
                       minute: '2-digit',
                     })}

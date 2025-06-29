@@ -1,5 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 
 import Home from './pages/home';
 import About from './pages/about';
@@ -47,13 +49,8 @@ const AppContent = () => {
 
   return (
     <>
-      {/* Always show navbar on public pages */}
       {shouldShowPublicUI && <Navbar />}
-
-      {/* Main pages */}
       <AnimatedRoutes />
-
-      {/* Only show these on public routes */}
       {shouldShowPublicUI && <Footer />}
       {shouldShowPublicUI && <ChatWidget />}
     </>
@@ -62,9 +59,11 @@ const AppContent = () => {
 
 function App() {
   return (
-    <Router>
-      <AppContent />
-    </Router>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Router>
+        <AppContent />
+      </Router>
+    </LocalizationProvider>
   );
 }
 

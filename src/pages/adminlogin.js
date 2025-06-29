@@ -39,28 +39,51 @@ const Logo = styled('img')({
 
 const AdminLogin = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleTogglePassword = () => setShowPassword((prev) => !prev);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const username = e.target.username.value.trim();
-    const password = e.target.password.value.trim();
 
-    if (username === 'admin' && password === 'admin123') {
-      localStorage.setItem('isAuthenticated', 'true');
-      navigate('/dashboard');
-    } else {
-      setError('Invalid username or password');
+    const trimmedUsername = username.trim();
+    const trimmedPassword = password.trim();
+
+    console.log('Sending credentials:', { trimmedUsername, trimmedPassword });
+
+    try {
+      const response = await fetch('http://localhost:5000/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: trimmedUsername,
+          password: trimmedPassword,
+        }),
+      });
+
+      const data = await response.json();
+      console.log('Server returned:', data);
+
+      if (response.ok) {
+        localStorage.setItem('isAuthenticated', 'true');
+        localStorage.setItem('adminName', data.name);
+        localStorage.setItem('adminPosition', data.position);
+        navigate('/dashboard');
+      } else {
+        setError(data.error || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      setError('Server error');
     }
   };
 
   return (
     <LoginWrapper>
       <LoginCard elevation={4}>
-        {/* Logo on top */}
         <Logo src="/logo.png" alt="Logo" />
 
         <Typography variant="h5" fontWeight={700} gutterBottom>
@@ -79,21 +102,23 @@ const AdminLogin = () => {
 
         <Box component="form" onSubmit={handleSubmit}>
           <TextField
-            name="username"
             label="Username"
             variant="outlined"
             fullWidth
             margin="normal"
             required
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
           />
           <TextField
-            name="password"
             label="Password"
             type={showPassword ? 'text' : 'password'}
             variant="outlined"
             fullWidth
             margin="normal"
             required
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
